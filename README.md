@@ -1,192 +1,349 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Điều khiển ESP32</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:linear-gradient(135deg,#4b6cb7,#182848);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.box{
-    width:100%;
-    max-width:400px;
-    background:#fff;
-    border-radius:20px;
-    padding:35px 30px;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-
-h1{
-    color:#333;
-    margin-bottom:25px;
-}
-
-.ip-box{
-    text-align:left;
-    margin-bottom:20px;
-}
-
-.ip-box label{
-    display:block;
-    margin-bottom:8px;
-    font-weight:bold;
-    color:#555;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-}
-
-button{
-    width:100%;
-    border:none;
-    border-radius:12px;
-    padding:20px;
-    font-size:24px;
-    font-weight:bold;
-    color:white;
-    cursor:pointer;
-    margin-top:12px;
-    transition:.2s;
-}
-
-button:active{
-    transform:scale(.97);
-}
-
-.on{
-    background:#22c55e;
-}
-
-.off{
-    background:#ef4444;
-}
-
-button:hover{
-    opacity:.9;
-}
-
-#status{
-    margin-top:20px;
-    font-size:15px;
-    color:#444;
-}
-
-.note{
-    margin-top:25px;
-    font-size:13px;
-    color:#777;
-    line-height:1.6;
-}
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎰 NỔ HŨ — trái cây 
+</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #1a0033, #4a0080, #000);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: linear-gradient(180deg, #2d0059, #1a0033);
+      border: 4px solid #ffd700;
+      border-radius: 20px;
+      padding: 30px 25px;
+      box-shadow: 0 0 30px #ffd70066, inset 0 0 40px #ff00ff22;
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 28px;
+      color: #ffd700;
+      text-shadow: 0 0 15px #ffd700;
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      color: #ffcc00;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .tien-box {
+      background: linear-gradient(90deg, #004d00, #008000);
+      border: 3px solid #00ff00;
+      border-radius: 10px;
+      padding: 12px 25px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .tien-box span {
+      font-size: 26px;
+      font-weight: bold;
+      color: #00ff00;
+      text-shadow: 0 0 8px #00ff00;
+    }
+    .jackpot-box {
+      background: #1a1a00;
+      border: 3px solid #ffd700;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .jackpot-label {
+      color: #ffd700;
+      font-size: 12px;
+    }
+    .jackpot-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffff00;
+      text-shadow: 0 0 10px #ffff00;
+    }
+    .hu {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    .cot {
+      width: 95px;
+      height: 95px;
+      border: 4px solid #ffd700;
+      border-radius: 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.2), 0 0 10px #ffd70055;
+    }
+    .cot.quay {
+      animation: shake 0.08s infinite;
+    }
+    @keyframes shake {
+      0% { transform: translateY(-4px); }
+      100% { transform: translateY(4px); }
+    }
+    .bet-box {
+      margin-bottom: 20px;
+    }
+    .bet-label {
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .bet-btns {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .bet-btn {
+      padding: 8px 15px;
+      font-size: 16px;
+      font-weight: bold;
+      border: 2px solid #ffd700;
+      background: #330066;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .bet-btn.active {
+      background: #ffd700;
+      color: #000;
+    }
+    .btn-quay {
+      background: linear-gradient(180deg, #ffcc00, #ff9900);
+      border: none;
+      border-radius: 50px;
+      padding: 15px 60px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #b36b00, 0 0 20px #ffcc0066;
+      transition: all 0.1s;
+    }
+    .btn-quay:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #b36b00;
+    }
+    .btn-quay:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .ket-qua {
+      margin-top: 20px;
+      min-height: 60px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .thang { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+    .thua { color: #ff4444; }
+    .nohu {
+      color: #ffff00;
+      font-size: 28px;
+      animation: nohu 0.4s infinite alternate;
+    }
+    @keyframes nohu {
+      from { text-shadow: 0 0 10px #ffff00, 0 0 20px #ff9900; }
+      to { text-shadow: 0 0 20px #ffff00, 0 0 40px #ff6600, 0 0 60px #ff3300; }
+    }
+    .bang-thuong {
+      margin-top: 20px;
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: left;
+      font-size: 12px;
+      color: #ccc;
+    }
+    .bang-thuong h3 {
+      color: #ffd700;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .line { display: flex; justify-content: space-between; padding: 2px 0; }
+    .line span:first-child { color: #fff; }
+    .line span:last-child { color: #0f0; }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>🎰 NỔ HŨ — QUYẾT CHIẾN</h1>
+    <p class="subtitle">⚔️ Chiến thắng để giành HŨ TIỀN THƯỞNG ⚔️</p>
 
-<div class="box">
+    <div class="tien-box">💰 Tiền: <span id="tien">5000</span></div>
+    
+    <div class="jackpot-box">
+      <div class="jackpot-label">🔥 HŨ TIỀN THƯỞNG</div>
+      <div class="jackpot-value" id="jackpot">100.000</div>
+    </div>
 
-<h1>🔧 ĐIỀU KHIỂN THIẾT BỊ</h1>
+    <div class="bet-box">
+      <div class="bet-label">💵 Mức cược:</div>
+      <div class="bet-btns">
+        <button class="bet-btn active" data-bet="100">100</button>
+        <button class="bet-btn" data-bet="200">200</button>
+        <button class="bet-btn" data-bet="500">500</button>
+        <button class="bet-btn" data-bet="1000">1000</button>
+      </div>
+    </div>
 
-<div class="ip-box">
-<label>📍 Địa chỉ IP ESP32</label>
-<input
-type="text"
-id="ipInput"
-placeholder="Ví dụ: 192.168.1.100">
-</div>
+    <div class="hu">
+      <div class="cot" id="c1">🍒</div>
+      <div class="cot" id="c2">🍋</div>
+      <div class="cot" id="c3">⭐</div>
+    </div>
 
-<button class="on" onclick="sendCommand('on')">
-🔌 BẬT
-</button>
+    <button class="btn-quay" id="btnQuay" onclick="quay()">🎲 QUAY</button>
+    
+    <div class="ket-qua" id="kq"></div>
 
-<button class="off" onclick="sendCommand('off')">
-⛔ TẮT
-</button>
+    <div class="bang-thuong">
+      <h3>🏆 BẢNG TIỀN THƯỞNG</h3>
+      <div class="line"><span>💎💎💎 KIM CƯƠNG</span><span>🔥 HŨ TOÀN BỘ 🔥</span></div>
+      <div class="line"><span>7️⃣7️⃣7️⃣ SỐ 7</span><span>x1000 CƯỢC</span></div>
+      <div class="line"><span>⭐⭐⭐ NGÔI SAO</span><span>x500 CƯỢC</span></div>
+      <div class="line"><span>🍇🍇🍇 NHO</span><span>x100 CƯỢC</span></div>
+      <div class="line"><span>🍉🍉🍉 DƯA HẤU</span><span>x50 CƯỢC</span></div>
+      <div class="line"><span>3 giống khác</span><span>x10 CƯỢC</span></div>
+      <div class="line"><span>2 giống nhau</span><span>Hoàn trả cược</span></div>
+    </div>
+  </div>
 
-<div id="status">
-Sẵn sàng...
-</div>
+  <script>
+    const bieuTuong = ['🍒', '🍋', '🍊', '🍇', '🍉', '⭐', '💎', '🔔', '7️⃣'];
+    const tiLe = {
+      '💎': -1, // Hũ toàn bộ
+      '7️⃣': 1000,
+      '⭐': 500,
+      '🍇': 100,
+      '🍉': 50,
+      '🍊': 10,
+      '🍋': 10,
+      '🍒': 10,
+      '🔔': 10
+    };
 
-<div class="note">
-💡 Nhập IP ESP32 rồi nhấn BẬT hoặc TẮT.<br>
-⚠️ Điện thoại và ESP32 phải cùng mạng WiFi.
-</div>
+    let tien = 5000;
+    let jackpot = 100000;
+    let cuoc = 100;
+    let dangQuay = false;
 
-</div>
-
-<script>
-
-// Tự điền IP đã lưu
-window.onload=function(){
-    const savedIP=localStorage.getItem("esp32_ip");
-    if(savedIP){
-        document.getElementById("ipInput").value=savedIP;
-    }
-};
-
-function sendCommand(cmd){
-
-    const ip=document.getElementById("ipInput").value.trim();
-
-    if(ip==""){
-        alert("Vui lòng nhập IP ESP32!");
-        return;
-    }
-
-    localStorage.setItem("esp32_ip",ip);
-
-    document.getElementById("status").innerHTML="Đang kết nối...";
-
-    fetch("http://"+ip+"/"+cmd)
-    .then(response=>{
-
-        if(response.ok){
-
-            document.getElementById("status").innerHTML=
-            (cmd=="on") ?
-            "✅ Thiết bị đang BẬT" :
-            "⛔ Thiết bị đã TẮT";
-
-        }else{
-
-            document.getElementById("status").innerHTML=
-            "❌ ESP32 phản hồi lỗi";
-
-        }
-
-    })
-
-    .catch(error=>{
-
-        document.getElementById("status").innerHTML=
-        "❌ Không kết nối được ESP32";
-
+    // Chọn mức cược
+    document.querySelectorAll('.bet-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (dangQuay) return;
+        document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cuoc = parseInt(btn.dataset.bet);
+      });
     });
 
-}
+    function layNgau() {
+      return bieuTuong[Math.floor(Math.random() * bieuTuong.length)];
+    }
 
-</script>
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
 
+    async function quay() {
+      if (dangQuay) return;
+      if (tien < cuoc) {
+        document.getElementById('kq').innerHTML = '<span class="thua">❌ Không đủ tiền!</span>';
+        return;
+      }
+
+      dangQuay = true;
+      tien -= cuoc;
+      jackpot += Math.floor(cuoc * 0.1); // 10% vào hũ
+      capNhat();
+
+      const c1 = document.getElementById('c1');
+      const c2 = document.getElementById('c2');
+      const c3 = document.getElementById('c3');
+      const btn = document.getElementById('btnQuay');
+      const kq = document.getElementById('kq');
+      
+      btn.disabled = true;
+      kq.innerHTML = '';
+
+      c1.classList.add('quay');
+      c2.classList.add('quay');
+      c3.classList.add('quay');
+
+      // Quay từng cột
+      for (let i = 0; i < 18; i++) { c1.textContent = layNgau(); await sleep(35 + i * 3); }
+      for (let i = 0; i < 22; i++) { c2.textContent = layNgau(); await sleep(40 + i * 3); }
+      for (let i = 0; i < 28; i++) { c3.textContent = layNgau(); await sleep(45 + i * 3); }
+
+      c1.classList.remove('quay');
+      c2.classList.remove('quay');
+      c3.classList.remove('quay');
+
+      // Kết quả cuối
+      let a = layNgau(), b = layNgau(), c = layNgau();
+      c1.textContent = a; c2.textContent = b; c3.textContent = c;
+
+      // Kiểm tra kết quả
+      await kiemTra(a, b, c);
+
+      dangQuay = false;
+      btn.disabled = false;
+    }
+
+    async function kiemTra(a, b, c) {
+      const kq = document.getElementById('kq');
+      
+      if (a === b && b === c) {
+        const t = tiLe[a];
+        if (t === -1) {
+          // NỔ HŨ KIM CƯƠNG
+          tien += jackpot;
+          kq.innerHTML = `<div class="nohu">🎉 NỔ HŨ TOÀN BỘ 🎉<br>+${dinhDang(jackpot)}</div>`;
+          jackpot = 50000; // Reset hũ
+        } else {
+          const thuong = cuoc * t;
+          tien += thuong;
+          kq.innerHTML = `<span class="thang">✅ ${a}${a}${a} — x${t}! +${dinhDang(thuong)}</span>`;
+        }
+      } else if (a === b || b === c || a === c) {
+        tien += cuoc; // Hoàn trả cược
+        kq.innerHTML = `<span class="thang">✨ Hai giống! Hoàn trả ${dinhDang(cuoc)}</span>`;
+      } else {
+        kq.innerHTML = `<span class="thua">😜 Thử vận may lần nữa!</span>`;
+      }
+      capNhat();
+    }
+
+    function capNhat() {
+      document.getElementById('tien').textContent = dinhDang(tien);
+      document.getElementById('jackpot').textContent = dinhDang(jackpot);
+    }
+
+    function dinhDang(n) {
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+  </script>
 </body>
 </html>
-
