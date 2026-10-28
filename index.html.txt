@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ESP32 Control</title>
+</head>
+<body>
+<h1>Điều khiển ESP32</h1>
+
+<button>BẬT</button>
+<button>TẮT</button>
+
+</body>
+</html>
