@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf‑8">
+<title>Game bắn nhau</title>
+<style>
+*{margin:0;padding:0}
+body{background:#222;display:flex;justify-content:center;align-items:center;height:100vh}
+canvas{border:3px solid white}
+</style>
+</head>
+<body>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Người chơi
+const player = {
+  x: 50,
+  y: 280,
+  w:40,
+  h:40,
+  speed:5
+}
+
+// Đạn
+let bullets = [];
+// Kẻ địch
+let enemies = [];
+
+// Phím bấm
+const keys = {};
+document.addEventListener('keydown',e=>{
+  keys[e.key] = true;
+  if(e.key === ' ') shootBullet();
+})
+document.addEventListener('keyup',e=>keys[e.key]=false)
+
+// Hàm bắn đạn
+function shootBullet(){
+  bullets.push({x:player.x+player.w, y:player.y+player.h/2, speed:8})
+}
+
+// Tạo địch ngẫu nhiên
+function spawnEnemy(){
+  enemies.push({
+    x:750,
+    y:Math.random()*520,
+    w:40,
+    h:40,
+    speed:2
+  })
+}
+setInterval(spawnEnemy,1500)
+
+// Vòng lặp game
+function gameLoop(){
+  ctx.fillStyle="#222";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // Di chuyển nhân vật
+  if(keys['ArrowUp'] && player.y>0) player.y -= player.speed;
+  if(keys['ArrowDown'] && player.y<560) player.y += player.speed;
+
+  // Vẽ người chơi
+  ctx.fillStyle="#00ff00";
+  ctx.fillRect(player.x,player.y,player.w,player.h);
+
+  // Cập nhật + vẽ đạn
+  for(let i=bullets.length‑1;i>=0;i--){
+    bullets[i].x += bullets[i].speed;
+    ctx.fillStyle="#ffff00";
+    ctx.fillRect(bullets[i].x,bullets[i].y,12,6);
+    if(bullets[i].x>800) bullets.splice(i,1);
+  }
+
+  // Cập nhật + vẽ kẻ địch + va chạm
+  for(let e=enemies.length‑1;e>=0;e--){
+    enemies[e].x -= enemies[e].speed;
+    ctx.fillStyle="#ff3333";
+    ctx.fillRect(enemies[e].x,enemies[e].y,enemies[e].w,enemies[e].h);
+
+    // Đạn trúng địch
+    for(let b=bullets.length‑1;b>=0;b--){
+      if( bullets[b].x < enemies[e].x+enemies[e].w &&
+          bullets[b].x+12 > enemies[e].x &&
+          bullets[b].y < enemies[e].y+enemies[e].h &&
+          bullets[b].y+6 > enemies[e].y ){
+        enemies.splice(e,1);
+        bullets.splice(b,1);
+        break;
+      }
+    }
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+gameLoop();
+</script>
+</body>
+</html>
